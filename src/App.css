@@ -1,0 +1,160 @@
+body {
+  background: linear-gradient(120deg, #f8fafc 0%, #e0e7ef 100%);
+  font-family: "Segoe UI", "Roboto", Arial, sans-serif;
+  margin: 0;
+  min-height: 100vh;
+}
+
+.ollama-app {
+  max-width: 700px;
+  margin: 2rem auto;
+  padding: 32px 28px 28px 28px;
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 4px 24px #0002, 0 1.5px 4px #0001;
+}
+
+.ollama-title {
+  text-align: center;
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: #2d3748;
+  margin-bottom: 1.5rem;
+  letter-spacing: 0.5px;
+}
+
+.ollama-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.ollama-field {
+  margin-bottom: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.ollama-field label {
+  font-weight: 500;
+  color: #374151;
+  margin-bottom: 0.2rem;
+}
+
+.ollama-field input[type="text"],
+.ollama-field textarea {
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  padding: 8px 10px;
+  font-size: 1rem;
+  background: #f9fafb;
+  transition: border 0.2s;
+}
+
+.ollama-field input[type="text"]:focus,
+.ollama-field textarea:focus {
+  border: 1.5px solid #6366f1;
+  outline: none;
+  background: #fff;
+}
+
+.ollama-checkbox {
+  flex-direction: row;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.ollama-send-btn {
+  background: linear-gradient(90deg, #6366f1 0%, #60a5fa 100%);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 32px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 0.5rem;
+  box-shadow: 0 2px 8px #6366f133;
+  transition: background 0.2s, box-shadow 0.2s;
+}
+.ollama-send-btn:disabled {
+  background: #cbd5e1;
+  color: #888;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+.ollama-send-btn:not(:disabled):hover {
+  background: linear-gradient(90deg, #4f46e5 0%, #2563eb 100%);
+  box-shadow: 0 4px 16px #6366f144;
+}
+
+.ollama-file-name {
+  margin-left: 10px;
+  color: #6366f1;
+  font-size: 0.98rem;
+  font-weight: 500;
+}
+
+.ollama-error {
+  color: #e11d48;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 6px;
+  padding: 10px 14px;
+  margin-top: 1.2rem;
+  font-size: 1.05rem;
+}
+
+.ollama-response {
+  margin-top: 2.2rem;
+  background: #f8fafc;
+  border-radius: 10px;
+  box-shadow: 0 1px 4px #0001;
+  padding: 1.2rem 1.2rem 1rem 1.2rem;
+}
+.ollama-response h3 {
+  margin-top: 0;
+  color: #2563eb;
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+
+.ollama-content-text {
+  font-size: 1.13rem;
+  color: #22223b;
+  line-height: 1.7;
+  margin-bottom: 0.7rem;
+  white-space: pre-wrap;
+}
+.ollama-content-json {
+  background: #e0e7ef;
+  color: #1e293b;
+  border-radius: 6px;
+  padding: 10px 12px;
+  font-size: 1.05rem;
+  margin-bottom: 0.7rem;
+  overflow-x: auto;
+}
+.ollama-json-raw {
+  background: #f3f4f6;
+  color: #334155;
+  border-radius: 6px;
+  padding: 10px 12px;
+  font-size: 0.98rem;
+  margin-top: 0.5rem;
+  overflow-x: auto;
+}
+
+.ollama-stats {
+  margin: 0.5rem 0 0.2rem 0;
+  color: #475569;
+  font-size: 1.05rem;
+  display: flex;
+  gap: 2.5rem;
+  align-items: center;
+}
+.ollama-stats b {
+  color: #2563eb;
+}
