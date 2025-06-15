@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import "./App.css";
+import ReactMarkdown from "react-markdown";
 
 function App() {
   // State for configuration
@@ -31,7 +32,11 @@ function App() {
     setModelsLoading(true);
     setModelsError("");
     try {
-      const res = await fetch(`${baseUrl}/api/tags`);
+      const res = await fetch(`${baseUrl}/api/tags`, {
+        headers: {
+          "User-Agent": "unga-bunga",
+        },
+      });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const data = await res.json();
       setModels(data.models || []);
@@ -134,7 +139,10 @@ function App() {
       console.log(payload);
       const res = await fetch(`${baseUrl}/api/chat`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          "User-Agent": "unga-bunga",
+        },
         body: JSON.stringify(payload),
       });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -204,36 +212,77 @@ function App() {
     }
   };
 
+  // Helper to extract <think>...</think> content, or everything after <think> if </think> is missing
+  const extractThink = (text) => {
+    if (!text) return null;
+    const start = text.indexOf("<think>");
+    if (start === -1) return null;
+    const end = text.indexOf("</think>", start);
+    if (end !== -1) {
+      return text.substring(start + 7, end).trim();
+    } else {
+      // No closing tag, take everything after <think>
+      return text.substring(start + 7).trim();
+    }
+  };
+
+  // Helper to remove <think>...</think> from content, or everything after <think> if </think> is missing
+  const removeThink = (text) => {
+    if (!text) return text;
+    const start = text.indexOf("<think>");
+    if (start === -1) return text;
+    const end = text.indexOf("</think>", start);
+    if (end !== -1) {
+      // Remove <think>...</think>
+      return (text.substring(0, start) + text.substring(end + 8)).trim();
+    } else {
+      // Remove everything after <think>
+      return text.substring(0, start).trim();
+    }
+  };
+
   // Helper to render the assistant's response content
   const renderContent = () => {
     if (streamedContent) {
-      let pretty = null;
-      try {
-        const parsed = JSON.parse(streamedContent);
-        pretty = (
-          <pre className="ollama-content-json">
-            {JSON.stringify(parsed, null, 2)}
-          </pre>
-        );
-      } catch {
-        pretty = <div className="ollama-content-text">{streamedContent}</div>;
-      }
-      return pretty;
+      // For streamed content, extract and render <think> and markdown
+      const think = extractThink(streamedContent);
+      const mainContent = removeThink(streamedContent);
+      return (
+        <>
+          {think && (
+            <div className="ollama-think-block">
+              <b>Thinking:</b>
+              <div className="ollama-think-content">{think}</div>
+            </div>
+          )}
+          {mainContent && (
+            <div className="ollama-content-markdown">
+              <ReactMarkdown>{mainContent}</ReactMarkdown>
+            </div>
+          )}
+        </>
+      );
     }
     if (!response || !response.message) return null;
     let content = response.message.content;
-    let pretty = null;
-    try {
-      const parsed = JSON.parse(content);
-      pretty = (
-        <pre className="ollama-content-json">
-          {JSON.stringify(parsed, null, 2)}
-        </pre>
-      );
-    } catch {
-      pretty = <div className="ollama-content-text">{content}</div>;
-    }
-    return pretty;
+    // Try to extract <think> and markdown from final response
+    const think = extractThink(content);
+    const mainContent = removeThink(content);
+    return (
+      <>
+        {think && (
+          <div className="ollama-think-block">
+            <b>Thinking:</b>
+            <div className="ollama-think-content">{think}</div>
+          </div>
+        )}
+        {mainContent && (
+          <div className="ollama-content-markdown">
+            <ReactMarkdown>{mainContent}</ReactMarkdown>
+          </div>
+        )}
+      </>
+    );
   };
 
   // Helper to render token/sec stats
